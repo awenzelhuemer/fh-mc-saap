@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using MediatR.DDD.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;

@@ -39,19 +39,19 @@ CQS, CQRS, MediatR
 
 \section{Introduction}
 
-Traditionally for a defined domain, a single model is used which handles all operations like read, update, create and read.
+Traditionally for a defined domain, a single model is used which handles all operations like read, update, create and delete.
 However, as the model becomes larger and complexer, the code becomes more and more unmanageable.
-For methods of services or logic classes it is often not clear, if the method only returns data or updates something or both.
-There could always be side effects.
-With the Command Query Separation (CQS) pattern, it is possible to separate each of these methods.
+For many operations it becomes unclear, if the method is returning data, modifies a state or does both.
+This means there could always be side effects.
+With the Command Query Separation (CQS) pattern, it is possible to separate each of these operations.
 
 \section{CQS}
 
 \subsection{What is CQS?}
 
-The CQS pattern is a design principle that states that a method or function should either execute an action or return a value, but not both. This means that a method should either modify the state of a system or return a value, but not both. The purpose of CQS is to make it clear what the purpose of a method is and to ensure that it is used correctly.
+The CQS pattern is a design principle that states that a method should either execute an action or return a value, but not both. This means that a method should either modify the state of a system or return a value, but not both. The purpose of CQS is to make it clear what the purpose of a method is and to ensure that it is used correctly.
 
-One way to implement CQS is to create two types of methods: commands and queries. Commands are methods that execute an action and do not return a value. Queries are methods that return a value but do not modify the state of the system. By clearly separating commands and queries, it becomes easier to understand the purpose of each method and to ensure that they are used correctly.
+One common way to implement CQS is to create two types of methods: commands and queries. Commands are methods that execute an action and do not return a value. Queries are methods that return a value but do not modify the state of the system. By clearly separating commands and queries, it becomes easier to understand the purpose of each method and to ensure that they are used correctly.
 
 CQS can be useful in a variety of situations, including distributed systems, event-driven architectures, and microservices. It can help to improve the clarity and maintainability of code, and can make it easier to understand and reason about the behavior of a system~\cite{martinfowler-cqs}.~\cite{martinfowler-cqs}.
 
@@ -66,22 +66,30 @@ CQS can be useful in a variety of situations, including distributed systems, eve
 
 What are the actual benefits of Queries and Commands for each domain model instead of creating on larger logic class which combines all operations?~\cite{martinfowler-cqs}
 
-Improved clarity and maintainability: By clearly separating commands and queries, it becomes easier to understand the purpose of each method and to ensure that they are used correctly. This can make the code more maintainable and easier to understand.
+\paragraph{Improved clarity and maintainability:}
+By clearly separating commands and queries, it becomes easier to understand the purpose of each method and to ensure that they are used correctly. This can make the code more maintainable and easier to understand.
 
-Improved testability: By separating commands and queries, it becomes easier to write unit tests that focus on either the action being performed or the value being returned, rather than both at the same time. This can make it easier to write tests that are more focused and effective.
+\paragraph{Improved testability:}
+By separating commands and queries, it becomes easier to write unit tests that focus on either the action being performed or the value being returned, rather than both at the same time. This can make it easier to write tests that are more focused and effective.
 
-Improved scalability: CQS can make it easier to scale a system, because the command and query models can be optimized independently. For example, the command model may need to support high write throughput, while the query model may need to support high read throughput. By separating these concerns, it is possible to optimize each model for its specific workload.
+\paragraph{Improved scalability:}
+CQS can make it easier to scale a system, because the command and query models can be optimized independently. For example, the command model may need to support high write throughput, while the query model may need to support high read throughput. By separating these concerns, it is possible to optimize each model for its specific workload.
 
-Improved flexibility: By separating commands and queries, it becomes easier to make changes to the system without affecting the other. For example, it is possible to change the implementation of the command model without affecting the query model, or vice versa. This can make it easier to evolve the system over time.
+\paragraph{Improved flexibility:}
+By separating commands and queries, it becomes easier to make changes to the system without affecting the other. For example, it is possible to change the implementation of the command model without affecting the query model, or vice versa. This can make it easier to evolve the system over time.
 
-Improved consistency: By separating the responsibility for reading and writing data, it becomes easier to ensure that the data is consistent across the system. For example, it is possible to use eventual consistency or other techniques to ensure that the data in the query model is up-to-date with the data in the command model.
+\paragraph{Improved consistency:}
+ By separating the responsibility for reading and writing data, it becomes easier to ensure that the data is consistent across the system. For example, it is possible to use eventual consistency or other techniques to ensure that the data in the query model is up-to-date with the data in the command model.
 
 \subsection{Disadvantages}
 
 CQS can be useful pattern for improving the separation of concerns in a codebase and making it easier to reason about the behavior of individual methods or functions, but it is not without problems and disadvantages.
 
-One disadvantage would be, that you need a lot more classes and for one operation.
-This can make the codebase more difficult to understand, in contrast to the classic approach, where all operations exist in one class.
+One disadvantage would be, that you need a lot more classes.
+For each operation multiple classes have to be created.
+Each handler, query or command itself are simple and easy to understand, but the project structure itself gets more complicated.
+In contrast to the classic approach where all operations are combined in one class.
+Especially for new developers CQS could add additional complexity.
 
 Also operations like pop() for stacks wouldn't be possible with CQS because it would be a command which also returns something.
 Instead one command and one query have to be called.
@@ -101,6 +109,16 @@ Keep commands and queries small: To make it easier to understand and maintain th
 Documenting the separation: It can be helpful to document the separation of commands and queries in the code or in external documentation to make it easier for other developers to understand the intended purpose of each method.
 
 Overall, the key to successfully implementing CQS is to carefully consider the responsibilities of each class and to clearly separate the commands from the queries to ensure that each class has a single, well-defined responsibility.
+
+\subsection{Area of application}
+
+Here are some examples in which kind of projects or architectures CQS can be used.
+
+\begin{itemize}
+    \item {Web applications: CQS can be used to separate HTTP request methods. POST, PUT, DELETE would be commands while GET would be a query.}
+    \item {Database systems: INSERT, UPDATE, DELETE operations could be handled separately from read operations such as SELECT.}
+    \item {Event driven architectures: Operations, that generate events (commands) could be separated from those that consume events (queries). This could help improve the decoupling and flexibility of the system.}
+\end{itemize}
 
 \section{CQRS?}
 
@@ -128,7 +146,7 @@ You might consider using CQRS instead of CRUD in situations where you need to su
 
 Overall, CQRS can be a useful pattern in certain situations where the requirements for reading and writing data are significantly different, or where you need to support high levels of read and write performance. However, it can also add complexity to a system, and should be carefully considered in the context of the specific requirements of a project~\cite{martinfowler-cqrs}.
 
-\section{SOLID Principles}
+\section{The connection with SOLID Principles}
 
 The SOLID principles are a set of guidelines for designing software that is easy to maintain and extend over time.
 One of the SOLID principles is the Single Responsibility Principle (SRP), which states that a class should have only one reason to change. In other words, a class should have a single, well-defined responsibility.
@@ -141,7 +159,13 @@ In summary, CQS is a principle that helps to ensure that classes have a single, 
 
 \section{Implementation of CQS with MediatR and C\#}
 
-\subsection{What is MediatR?}
+\subsection{What is a Mediator?}
+
+A mediator is a design pattern that allows you to decouple the components of a system by introducing a middleman that handles the communication between the components.
+
+\subsection{What is the MediatR library?}
+
+MediatR is a popular mediator library implemented in C\#.
 
 MediatR can be used to implement the CQS pattern by separating commands and queries into distinct classes, and using MediatR to handle the routing and execution of these messages. For example, you might define a command class to represent a request to update a database record, and a query class to represent a request to retrieve data from the database. You can then use MediatR to handle the routing of these requests to the appropriate handler classes, which can be responsible for executing the actual command or query.
 
@@ -150,7 +174,7 @@ MediatR can be a useful tool for implementing the CQS pattern in a .NET applicat
 The library can be registered using .NET Core dependency injection.
 After the registration the \texttt{IMediator} interface can injected into controllers or azure functions using constructor injection.
 
-\subsection{Practical example}
+\subsection{Example}
 
 We have a database with different heroes and want read and write operations for them over separate microservices.
 One possibility would be to use the CQS pattern, which we will use here.
@@ -164,7 +188,14 @@ First each operation will be one separate microservice:
     \item {HeroesPut: Update existing hero}
 \end{itemize}
 
-Depending on the operation we will need a query or command and additionally validation and checks.
+Each operation is implemented as a serverless azure function.
+Depending on the operation, a query or command is needed.
+For commands additional validators and checks are needed.
+
+First the MediatR package needs to be installed and configured.
+.NET Core has a built in dependency injection container.
+MediatR can be registered by calling the method \texttt{AddMediatR()}.
+After that MediatR can be injected everywhere where needed using constructor injection.
 
 \begin{lstlisting}[caption=Register MediatR]
 public override void Configure(
@@ -174,9 +205,10 @@ public override void Configure(
 }
 \end{lstlisting}
 
-With \texttt{mediator.send()} can a command or query be sent to the mediator.
-In this example below a new query gets created with the id parameter.
-The query object gets passed to the mediator, which calls the handler and the response gets returned to the client.
+With \texttt{mediator.send(..)} a command or query can be sent to the mediator.
+In the example below an azure function was created.
+First a new query object gets created, which gets passed to the mediator.
+The mediator routes the object to a corresponding registered handler, executes it and returns the response to the caller.
 In case of an exception, the appropriate status code with message gets returned.
 
 \begin{lstlisting}[caption=Azure Function with MediatR]
@@ -263,7 +295,6 @@ public class CreateCommandValidator
 
 In total these would be the classes we would need for the operations specified above.
 
-
 \begin{itemize}
     \item {CreateHeroCommand}
     \item {CreateHeroCommandHandler}
@@ -279,7 +310,7 @@ In total these would be the classes we would need for the operations specified a
 
 These should highlight the difference to a classic architecture where you would have one \texttt{IHeroService} and \texttt{HeroService}.
 The class would include all necessary operations, nothing else is needed.
-For this few simple operations, the HeroService would be enough, but it could become extremely complex with more operations which are often not as straight forward as these standard operations.
+For this few simple operations, the \texttt{HeroService} would be enough, but it could become extremely complex with more operations which are often not as straight forward as these standard operations.
 
 \section{Conclusion}
 
