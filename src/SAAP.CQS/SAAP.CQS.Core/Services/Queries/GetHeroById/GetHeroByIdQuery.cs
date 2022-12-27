@@ -16,7 +16,7 @@ namespace SAAP.CQS.Core.Services.Queries.GetHeroById
 
         #region Public Properties
 
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
 
         #endregion
     }

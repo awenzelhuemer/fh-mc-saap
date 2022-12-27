@@ -41,14 +41,6 @@ namespace SAAP.CQS.FunctionsAPI.Heroes
                 var response = await mediator.Send(new GetHeroesQuery());
                 return new OkObjectResult(response);
             }
-            catch (BadRequestException ex)
-            {
-                return new BadRequestObjectResult(ex.Message);
-            }
-            catch (ConflictException ex)
-            {
-                return new ConflictObjectResult(ex.Message);
-            }
             catch (Exception ex)
             {
                 logger.LogError(ex.Message);

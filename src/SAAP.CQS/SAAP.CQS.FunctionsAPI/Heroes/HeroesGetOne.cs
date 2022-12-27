@@ -47,14 +47,6 @@ namespace SAAP.CQS.FunctionsAPI.Heroes
             {
                 return new NotFoundObjectResult(ex.Message);
             }
-            catch (BadRequestException ex)
-            {
-                return new BadRequestObjectResult(ex.Message);
-            }
-            catch (ConflictException ex)
-            {
-                return new ConflictObjectResult(ex.Message);
-            }
             catch (Exception ex)
             {
                 logger.LogError(ex.Message);
