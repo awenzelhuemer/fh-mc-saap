@@ -11,13 +11,9 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage{listings}
 \usepackage{parskip}
-
-\lstset{
-    basicstyle=\fontsize{8}{13}\ttfamily
-}
-\lstdefinestyle{sharpc}{language=[Sharp]C, frame=lr, rulecolor=\color{blue!80!black}}
+\usepackage{listings}
+\lstset{basicstyle=\scriptsize\ttfamily}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -53,7 +49,7 @@ The CQS pattern is a design principle that states that a method should either ex
 
 One common way to implement CQS is to create two types of methods: commands and queries. Commands are methods that execute an action and do not return a value. Queries are methods that return a value but do not modify the state of the system. By clearly separating commands and queries, it becomes easier to understand the purpose of each method and to ensure that they are used correctly.
 
-CQS can be useful in a variety of situations, including distributed systems, event-driven architectures, and microservices. It can help to improve the clarity and maintainability of code, and can make it easier to understand and reason about the behavior of a system~\cite{martinfowler-cqs}.~\cite{martinfowler-cqs}.
+CQS can be useful in a variety of situations, including distributed systems, event-driven architectures, and microservices. It can help to improve the clarity and maintainability of code, and can make it easier to understand and reason about the behavior of a system~\cite{martinfowler-cqs}.
 
 \begin{figure}[h]
     \centering
@@ -66,19 +62,19 @@ CQS can be useful in a variety of situations, including distributed systems, eve
 
 What are the actual benefits of Queries and Commands for each domain model instead of creating on larger logic class which combines all operations?~\cite{martinfowler-cqs}
 
-\paragraph{Improved clarity and maintainability:}
+\paragraph{Improved clarity and maintainability}
 By clearly separating commands and queries, it becomes easier to understand the purpose of each method and to ensure that they are used correctly. This can make the code more maintainable and easier to understand.
 
-\paragraph{Improved testability:}
+\paragraph{Improved testability}
 By separating commands and queries, it becomes easier to write unit tests that focus on either the action being performed or the value being returned, rather than both at the same time. This can make it easier to write tests that are more focused and effective.
 
-\paragraph{Improved scalability:}
+\paragraph{Improved scalability}
 CQS can make it easier to scale a system, because the command and query models can be optimized independently. For example, the command model may need to support high write throughput, while the query model may need to support high read throughput. By separating these concerns, it is possible to optimize each model for its specific workload.
 
-\paragraph{Improved flexibility:}
+\paragraph{Improved flexibility}
 By separating commands and queries, it becomes easier to make changes to the system without affecting the other. For example, it is possible to change the implementation of the command model without affecting the query model, or vice versa. This can make it easier to evolve the system over time.
 
-\paragraph{Improved consistency:}
+\paragraph{Improved consistency}
  By separating the responsibility for reading and writing data, it becomes easier to ensure that the data is consistent across the system. For example, it is possible to use eventual consistency or other techniques to ensure that the data in the query model is up-to-date with the data in the command model.
 
 \subsection{Disadvantages}
@@ -174,7 +170,7 @@ MediatR can be a useful tool for implementing the CQS pattern in a .NET applicat
 The library can be registered using .NET Core dependency injection.
 After the registration the \texttt{IMediator} interface can injected into controllers or azure functions using constructor injection.
 
-\subsection{Example}
+\subsection{Example with Azure Functions}
 
 We have a database with different heroes and want read and write operations for them over separate microservices.
 One possibility would be to use the CQS pattern, which we will use here.
