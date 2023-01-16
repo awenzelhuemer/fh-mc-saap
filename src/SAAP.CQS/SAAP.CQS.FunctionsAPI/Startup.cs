@@ -2,9 +2,8 @@
 using MediatR;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using SAAP.CQS.Core.Services.Behaviours;
 using SAAP.CQS.Core.Services.Commands.CreateHero;
-using SAAP.CQS.Core.Services.Contracts;
-using SAAP.CQS.Core.Services.Validations;
 using SAAP.CQS.Data;
 using SAAP.CQS.FunctionsAPI;
 
@@ -20,7 +19,7 @@ namespace SAAP.CQS.FunctionsAPI
         {
             builder.Services.AddMediatR(typeof(CreateHeroCommandValidator));
             builder.Services.AddValidatorsFromAssemblyContaining(typeof(CreateHeroCommandValidator));
-            builder.Services.AddSingleton<IValidatorService, ValidatorService>();
+            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             builder.Services.AddDbContext<HeroDbContext>();
         }
 

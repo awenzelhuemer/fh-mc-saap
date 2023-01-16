@@ -1,3 +1,4 @@
+using FluentValidation;
 using MediatR;
 using MediatR.DDD.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -20,17 +21,15 @@ namespace SAAP.CQS.FunctionsAPI.Heroes
 
         private readonly ILogger<HeroesPost> logger;
         private readonly IMediator mediator;
-        private readonly IValidatorService validatorService;
 
         #endregion
 
         #region Public Constructors
 
-        public HeroesPost(IMediator mediator, ILogger<HeroesPost> logger, IValidatorService validatorService)
+        public HeroesPost(IMediator mediator, ILogger<HeroesPost> logger)
         {
             this.mediator = mediator;
             this.logger = logger;
-            this.validatorService = validatorService;
         }
 
         #endregion
@@ -45,13 +44,11 @@ namespace SAAP.CQS.FunctionsAPI.Heroes
             {
                 string body = await new StreamReader(request.Body).ReadToEndAsync();
                 CreateHeroCommand command = JsonConvert.DeserializeObject<CreateHeroCommand>(body);
-
-                await validatorService.ValidateAsync(command);
                 CreateHeroCommandResponse response = await mediator.Send(command);
 
                 return new CreatedResult($"{RouteConfig.URL}/{response.Hero.Id}", response.Hero);
             }
-            catch (BadRequestException ex)
+            catch (ValidationException ex)
             {
                 return new BadRequestObjectResult(ex.Message);
             }

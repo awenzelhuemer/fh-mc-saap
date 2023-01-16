@@ -7,7 +7,6 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SAAP.CQS.Core.Services.Commands.UpdateHero;
-using SAAP.CQS.Core.Services.Contracts;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -20,17 +19,15 @@ namespace SAAP.CQS.FunctionsAPI.Heroes
 
         private readonly ILogger<HeroesPost> logger;
         private readonly IMediator mediator;
-        private readonly IValidatorService validatorService;
 
         #endregion
 
         #region Public Constructors
 
-        public HeroesPut(IMediator mediator, ILogger<HeroesPost> logger, IValidatorService validatorService)
+        public HeroesPut(IMediator mediator, ILogger<HeroesPost> logger)
         {
             this.mediator = mediator;
             this.logger = logger;
-            this.validatorService = validatorService;
         }
 
         #endregion
@@ -48,7 +45,6 @@ namespace SAAP.CQS.FunctionsAPI.Heroes
                 UpdateHeroCommand command = JsonConvert.DeserializeObject<UpdateHeroCommand>(body);
                 command.Id = id;
 
-                await validatorService.ValidateAsync(command);
                 UpdateHeroCommandResponse response = await mediator.Send(command);
 
                 return new OkObjectResult(response);
