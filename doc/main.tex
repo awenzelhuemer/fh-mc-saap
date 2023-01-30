@@ -21,6 +21,8 @@
 \begin{document}
 \title{CQS: Command Query Separation}
 
+\thispagestyle{plain}
+\pagestyle{plain}
 \maketitle
 
 \begin{abstract}
@@ -87,8 +89,8 @@ Each handler, query or command itself are simple and easy to understand, but the
 In contrast to the classic approach where all operations are combined in one class.
 Especially for new developers CQS could add additional complexity.
 
-Also operations like pop() for stacks wouldn't be possible with CQS because it would be a command which also returns something.
-Instead one command and one query have to be called.
+Also operations like \texttt{pop()} for stacks or \texttt{next()} for iterators wouldn't be possible with CQS because they are a combination of commands and queries.
+Instead, the method would have to be split into a command and a query.
 
 \subsection{Challenges and Best Practices}
 
@@ -305,7 +307,7 @@ In total these would be the classes we would need for the operations specified a
 \end{itemize}
 
 These should highlight the difference to a classic architecture where you would have one \texttt{IHeroService} and \texttt{HeroService}.
-The class would include all necessary operations, nothing else is needed.
+The service would include all necessary operations.
 For this few simple operations, the \texttt{HeroService} would be enough, but it could become extremely complex with more operations which are often not as straight forward as these standard operations.
 
 \section{Conclusion}
